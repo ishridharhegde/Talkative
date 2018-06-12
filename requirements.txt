@@ -1,2 +1,4 @@
 django
 django-registration-redux
+jsmin
+django-filebrowser-no-grappelli

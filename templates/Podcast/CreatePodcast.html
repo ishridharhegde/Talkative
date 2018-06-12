@@ -1,0 +1,21 @@
+ <html lang="en">
+     <head>
+         <title>
+             Create a Podcast
+         </title>
+         <meta charset="utf-8" />
+         {% load static %}
+         <meta name="viewport" content = "width=device-width, initial-scale=1.0">
+         {{ CreatePodcastForm.media }}
+ </head>
+ <body>
+ <div class="publish_content">
+      <h1> Create a Podcast</h1>
+     <form method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+         {{ CreatePodcastForm }}
+         <input type="submit" value="Submit"/>
+     </form>
+ </div>
+ </body>
+ </html>

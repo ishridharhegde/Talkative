@@ -19,5 +19,7 @@ from django.conf.urls import url,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^tinymce/', include('tinymce.urls')),
     url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^podcast/',include('Podcast.urls')),
 ]
