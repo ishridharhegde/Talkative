@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="utf-8" />
+    {% load static %}
+    {{ Podcast_Edit_Form.media }}
+
+    <title>{{ podcast.Name }}</title>
+</head>
+<body>
+    <h1> Edit Podcast</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ Podcast_Edit_Form }}
+        <input type="submit" value="Submit"/>
+    </form>
+</body>
+</html>

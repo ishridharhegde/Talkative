@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ Podcast_Data.Name }}</title>
+</head>
+<body>
+    <h1>{{ Podcast_Data.Name }}</h1>
+    <h3>{{ Podcast_Data.Author }}</h3>
+    <span>
+        {{ Podcast_Data.Description|safe|linebreaks}}
+        </span>
+</body>
+</html>
