@@ -1,3 +1,8 @@
 from django.contrib import admin
+from Podcast.models import Podcast,Episode
 
-# Register your models here.
+class PodcastAdmin(admin.ModelAdmin):
+    admin.site.register(Podcast)
+
+class EpisodeAdmin(admin.ModelAdmin):
+    admin.site.register(Episode)

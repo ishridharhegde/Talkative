@@ -11,6 +11,10 @@
     <h3>{{ Podcast_Data.Author }}</h3>
     <span>
         {{ Podcast_Data.Description|safe|linebreaks}}
-        </span>
+    </span>
+    <h1>Episode List</h1>
+    {% for Episode in Episodes_List %}
+        <li>{{ Episode.Name }}</li>
+    {% endfor %}
 </body>
 </html>

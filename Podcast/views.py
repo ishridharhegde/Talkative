@@ -1,13 +1,16 @@
 from django.shortcuts import render
-from Podcast.forms import CreatePodcastForm
+from Podcast.forms import CreatePodcastForm,CreateEpisodeForm
 from django.shortcuts import render, redirect, HttpResponseRedirect
-from Podcast.models import Podcast
+from Podcast.models import Podcast,Episode
 from django.views.generic import DetailView
 
 def CreatePodcastView(request):
 	if request.method == 'POST':
 		form = CreatePodcastForm(request.POST, request.FILES)
 		if form.is_valid():
+			Form_Instance_Copy = form.save(commit=False)
+			Form_Instance_Copy.Created_By_User = str(request.user.username)
+			Form_Instance_Copy.save()
 			form.save()
 			return HttpResponseRedirect('/podcast/archives/')
 		else:
@@ -20,7 +23,8 @@ def PodcastListView(request):
 
 def PodcastDetailView(request,slug):
 	Podcast_Data = Podcast.objects.get(slug=slug)
-	return render(request, 'Podcast/PodcastDetail.html', {'Podcast_Data':Podcast_Data })
+	Episodes_List = Episode.objects.all().filter(Pod_Slug=slug)
+	return render(request, 'Podcast/PodcastDetail.html', {'Podcast_Data':Podcast_Data,'Episodes_List':Episodes_List })
 
 def PodcastEditView(request,slug):
 	if request.method == 'POST':
@@ -44,3 +48,21 @@ def PodcastDeleteView(request,slug):
 	Podcast_Obj = Podcast.objects.get(slug=slug)
 	Podcast_Obj.delete()
 	return HttpResponseRedirect('/podcast/archives')
+
+def CreateEpisodeView(request,slug):
+	if request.method == 'POST':
+		form = CreateEpisodeForm(request.POST, request.FILES)
+		if form.is_valid():
+			Form_Instance_Copy = form.save(commit=False)
+			Form_Instance_Copy.Created_By_User = str(request.user.username)
+			Form_Instance_Copy.Pod_Slug = slug
+			Form_Instance_Copy.save()
+			return HttpResponseRedirect('/podcast/'+ slug)
+		else:
+			return render(request, 'Podcast/CreateEpisode.html', {'CreateEpisode': CreateEpisodeForm})
+	return render(request, 'Podcast/CreateEpisode.html', {'CreateEpisodeForm': CreateEpisodeForm})
+
+def EpisodeDetailView(request,epi_slug):
+	print(epi_slug)
+	Episode_Data = Episode.object.get(epi_slug=epi_slug)
+	return render(request, 'Podcast/EpisodeDetail.html', {'Episode_Data':Episode_Data})
