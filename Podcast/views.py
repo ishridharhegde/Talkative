@@ -62,7 +62,30 @@ def CreateEpisodeView(request,slug):
 			return render(request, 'Podcast/CreateEpisode.html', {'CreateEpisode': CreateEpisodeForm})
 	return render(request, 'Podcast/CreateEpisode.html', {'CreateEpisodeForm': CreateEpisodeForm})
 
-def EpisodeDetailView(request,epi_slug):
-	print(epi_slug)
-	Episode_Data = Episode.object.get(epi_slug=epi_slug)
+def EpisodeDetailView(request,slug):
+	Episode_Data = Episode.objects.get(slug=slug)
 	return render(request, 'Podcast/EpisodeDetail.html', {'Episode_Data':Episode_Data})
+
+def EpisodeEditView(request,slug):
+	if request.method == 'POST':
+		Episode_Data = Episode.objects.get(slug=slug)
+		Episode_Edit_Form = CreateEpisodeForm(request.POST, request.FILES,instance=Episode_Data)
+		if Episode_Edit_Form.is_valid():
+			Episode_Edit_Form.save()
+			url = '/podcast/episode/' + str(slug)
+			print(url)
+			return HttpResponseRedirect(url)
+		else:
+			Episode_Edit_Form = CreatePodcastForm(instance=request.user,initial={'Name':Episode_Data.Name,'Episode_Descriptionn':Episode_Data.Episode_Description,'Episode_File':Episode_Data.Episode_File,'Episode_Thumbnail':Episode_Data.Episode_Thumbnail})
+			args = {'Episode_Edit_Form':Episode_Edit_Form}
+			return render(request,'Podcast/EpisodeDetailEdit.html',args)
+	else:	
+		Episode_Data = Episode.objects.get(slug=slug)
+		Episode_Edit_Form = CreateEpisodeForm(instance=request.user,initial={'Name':Episode_Data.Name,'Episode_Description':Episode_Data.Episode_Description,'Episode_File':Episode_Data.Episode_File,'Episode_Thumbnail':Episode_Data.Episode_Thumbnail})
+		args = {'Episode_Edit_Form':Episode_Edit_Form}
+		return render(request,'Podcast/EpisodeDetailEdit.html',args)
+	
+def EpisodeDeleteView(request,slug):
+	Episode_Obj = Episode.objects.get(slug=slug)
+	Episode_Obj.delete()
+	return HttpResponseRedirect('/podcast/archives/')

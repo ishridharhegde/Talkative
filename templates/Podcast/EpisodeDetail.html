@@ -8,6 +8,6 @@
 </head>
 <body>
     <h1>{{ Episode_Data.Name }}</h1>
-    <h3>{{ Episode_Data.Episode_Description }}</h3>
+    <h3>{{ Episode_Data.Episode_Description|safe|linebreaks }}</h3>
 </body>
 </html>

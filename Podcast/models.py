@@ -34,14 +34,14 @@ class Episode(models.Model):
     Number_of_Views = models.BigIntegerField(null=True,blank=False)
     Number_Of_Likes = models.IntegerField(null=True,blank=False)
     Pod_Slug =  models.SlugField(default='no-slug', max_length=300, blank=True)
-    epi_slug = models.SlugField(max_length=300, unique=True, null=True)
+    slug = models.SlugField(default='no-slug', max_length=300, blank=True)
 
     def __str__(self):
         return self.Name
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.epi_slug = '/'.join((self.Pod_Slug,slugify(self.Name)))
+            self.slug = slugify(self.Name)
             self.Date_Of_Publication = timezone.now()
             self.Last_Updated_At = timezone.now()
         super(Episode, self).save(*args, **kwargs)
