@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+		<link rel="stylesheet" type="text/css" href="{% static 'Podcast/Playlist_Player/css/foundation.min.css' %}"/>
+		<script type="text/javascript" src="{% static 'Podcast/Playlist_Player/js/jquery.js' %}"></script>
+		<script type="text/javascript" src="{% static 'Podcast/Playlist_Player/js/foundation.min.js' %}"></script>
+		<script type="text/javascript" src="{% static 'Podcast/Playlist_Player/js/amplitude.js' %}"></script>
+		<script type="text/javascript" src="{% static 'Podcast/Playlist_Player/js/functions.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'Podcast/Playlist_Player/css/styles.css' %}"/>
+        
     <title>{{ Podcast_Data.Name }}</title>
 </head>
 <body>
@@ -12,9 +20,98 @@
     <span>
         {{ Podcast_Data.Description|safe|linebreaks}}
     </span>
-    <h1>Episode List</h1>
-    {% for Episode in Episodes_List %}
-        <li>{{ Episode.Name }}</li>
-    {% endfor %}
+    <h1>Episode Playlist</h1>
+    <div class="row">
+        <div class="large-8 medium-10 small-11 large-centered medium-centered small-centered columns" id="amplitude-player">
+            <div class="row">
+                <div class="large-6 medium-6 small-12 columns" id="amplitude-left">
+                    <img amplitude-song-info="cover_art_url" amplitude-main-song-info="true"/>
+                    <div id="player-left-bottom">
+                        <div id="time-container">
+                            <span class="current-time">
+                                <span class="amplitude-current-minutes" amplitude-main-current-minutes="true"></span>:<span class="amplitude-current-seconds" amplitude-main-current-seconds="true"></span>
+                            </span>
+                            <input type="range" class="amplitude-song-slider" amplitude-main-song-slider="true" step=".1"/>
+                            <span class="duration">
+                                <span class="amplitude-duration-minutes" amplitude-main-duration-minutes="true"></span>:<span class="amplitude-duration-seconds" amplitude-main-duration-seconds="true"></span>
+                            </span>
+                        </div>
+
+                        <div id="control-container">
+                            <div id="repeat-container">
+                                <div class="amplitude-repeat" id="repeat"></div>
+                            </div>
+
+                            <div id="central-control-container">
+                                <div id="central-controls">
+                                    <div class="amplitude-prev" id="previous"></div>
+                                    <div class="amplitude-play-pause" amplitude-main-play-pause="true" id="play-pause"></div>
+                                    <div class="amplitude-next" id="next"></div>
+                                </div>
+                            </div>
+
+                            <div id="shuffle-container">
+                                <div class="amplitude-shuffle amplitude-shuffle-off" id="shuffle"></div>
+                            </div>
+                        </div>
+
+                        <div id="meta-container">
+                            <span amplitude-song-info="name" amplitude-main-song-info="true" class="song-name"></span>
+
+                            <div class="song-artist-album">
+                                <span amplitude-song-info="artist" amplitude-main-song-info="true"></span>
+                                <span amplitude-song-info="album" amplitude-main-song-info="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="large-6 medium-6 small-12 columns" id="amplitude-right">
+                    <div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="0">
+                        <div class="song-now-playing-icon-container">
+                            <div class="play-button-container">
+
+                            </div>
+                            <img class="now-playing" src="{% static 'Podcast/Playlist_Player/img/now-playing.svg' %}"/>
+                        </div>
+                        
+                    {% for Episode in Episodes_List %}
+                    <div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="10">
+                        <div class="song-now-playing-icon-container">
+                            <div class="play-button-container">
+                            </div>
+                        </div>
+                        <div class="song-meta-data">
+                            <span class="song-title">{{Episode.Name}}</span>
+                            <span class="song-artist">{{Episode.Name}}</span>
+                        </div>
+                        <a href="{{ Episode.Episode_File.url }}" class="bandcamp-link" target="_blank">
+                            <img class="bandcamp-grey" src="{% static 'Podcast/Playlist_Player/img/bandcamp-grey.svg' %}"/>
+                            <img class="bandcamp-white" src="{% static 'Podcast/Playlist_Player/img/bandcamp-white.svg' %}"/>
+                        </a>
+                        <span class="song-duration">5:40</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+{% for Episode in Episodes_List %}
+<script type="text/javascript">
+    Amplitude.init({
+        "songs": [
+            {
+                "name": "Risin' High (feat Raashan Ahmad)",
+                "artist": "Ancient Astronauts",
+                "album": "We Are to Answer",
+                "url": "{{ Episode.Episode_File.url }}",
+                "cover_art_url": "{{ Episode.Episode_Thumbnail.url }}"
+            },
+        ]
+    });
+
+</script>
+{% endfor %}
 </body>
 </html>
