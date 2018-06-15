@@ -5,6 +5,9 @@ from django.shortcuts import render, redirect, HttpResponseRedirect
 from Podcast.models import Podcast,Episode,timezone
 from django.views.generic import DetailView
 
+
+# Podcast Modules
+
 @login_required
 def CreatePodcastView(request):
 	if request.method == 'POST':
@@ -50,9 +53,12 @@ def PodcastEditView(request,slug):
 @login_required
 def PodcastDeleteView(request,slug):
 	Podcast_Obj = Podcast.objects.get(slug=slug)
-	Podcast_Obj.delete()
+	if Podcast_Obj.Created_By_User == str(request.user.username):
+		Podcast_Obj.delete()
 	return HttpResponseRedirect('/podcast/archives')
 
+
+# Episode Modules
 
 @login_required
 def CreateEpisodeView(request,slug):
@@ -64,7 +70,7 @@ def CreateEpisodeView(request,slug):
 			Form_Instance_Copy.Pod_Slug = slug
 			Form_Instance_Copy.save()
 			form.save()
-			return HttpResponseRedirect('/podcast/archive/'+ slug)
+			return HttpResponseRedirect('/podcast/archives/'+ slug)
 		else:
 			return render(request, 'Podcast/CreateEpisode.html', {'CreateEpisode': CreateEpisodeForm})
 	return render(request, 'Podcast/CreateEpisode.html', {'CreateEpisodeForm': CreateEpisodeForm})
@@ -84,8 +90,7 @@ def EpisodeEditView(request,slug):
 			Form_Instance_Copy.save()
 			Form_Instance_Copy.save()
 			Episode_Edit_Form.save()
-			url = '/podcast/archive/episode/' + str(slug)
-			print(url)
+			url = '/podcast/archives/episode/' + str(slug)
 			return HttpResponseRedirect(url)
 		else:
 			Episode_Edit_Form = CreatePodcastForm(instance=request.user,initial={'Name':Episode_Data.Name,'Episode_Descriptionn':Episode_Data.Episode_Description,'Episode_File':Episode_Data.Episode_File,'Episode_Thumbnail':Episode_Data.Episode_Thumbnail})
@@ -101,5 +106,6 @@ def EpisodeEditView(request,slug):
 def EpisodeDeleteView(request,slug):
 	Episode_Obj = Episode.objects.get(slug=slug)
 	Podcast_Link = Episode_Obj.Pod_Slug
-	Episode_Obj.delete()
+	if Episode_Obj.Created_By_User == str(request.user.username):
+		Episode_Obj.delete()
 	return HttpResponseRedirect('/podcast/archives/'+str(Podcast_Link))

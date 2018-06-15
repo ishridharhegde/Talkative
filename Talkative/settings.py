@@ -57,10 +57,10 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'Talkative.urls'
 
 TEMPLATES = [
-    {
+  {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR + '/templates/',
+            os.path.normpath(os.path.join(BASE_DIR, 'templates')),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -69,10 +69,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'Talkative.wsgi.application'
 
@@ -127,8 +129,6 @@ SITE_ID = 1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-
-STATIC_URL = '/static/'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'), ]

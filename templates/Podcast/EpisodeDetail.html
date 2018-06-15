@@ -9,5 +9,10 @@
 <body>
     <h1>{{ Episode_Data.Name }}</h1>
     <h3>{{ Episode_Data.Episode_Description|safe|linebreaks }}</h3>
+    <audio controls>
+            <source src="{{Episode_Data.Episode_File.url}}" type="audio/mpeg">
+          Your browser does not support the audio element.
+    </audio>
+    <img src="{{Episode_Data.Episode_Thumbnail.url}}" width=300 height=300 alt="">
 </body>
 </html>
