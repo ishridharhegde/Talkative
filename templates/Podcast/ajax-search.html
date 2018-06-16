@@ -1,0 +1,7 @@
+{% if Podcast_List.count > 0 %}
+    {% for Podcast in Podcast_List %}
+        <li><a href="/podcast/archives/{{Podcast.slug}}">{{Podcast.Name}}</a></li>
+    {% endfor %}
+{% else %}
+    <li>None Found!</li>
+{% endif %}

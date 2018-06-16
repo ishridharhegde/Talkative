@@ -27,6 +27,7 @@ def PodcastListView(request):
 	return render(request, 'Podcast/PodcastList.html', {'PodcastList': PodcastList})
 
 def PodcastDetailView(request,slug):
+	print(slug)
 	Podcast_Data = Podcast.objects.get(slug=slug)
 	Episodes_List = Episode.objects.all().filter(Pod_Slug=slug)
 	return render(request, 'Podcast/PodcastDetail.html', {'Podcast_Data':Podcast_Data,'Episodes_List':Episodes_List })
@@ -38,7 +39,7 @@ def PodcastEditView(request,slug):
 		Podcast_Edit_Form = CreatePodcastForm(request.POST, request.FILES,instance=Podcast_Data)
 		if Podcast_Edit_Form.is_valid():
 			Podcast_Edit_Form.save()
-			url = '/podcast/archive/' + str(slug)
+			url = '/podcast/archives/' + str(slug)
 			return HttpResponseRedirect(url)
 		else:
 			Podcast_Edit_Form = CreatePodcastForm(instance=request.user,initial={'Name':Podcast_Data.Name,'Author':Podcast_Data.Author,'Description':Podcast_Data.Description,'Background_Image':Podcast_Data.Background_Image})
@@ -55,7 +56,7 @@ def PodcastDeleteView(request,slug):
 	Podcast_Obj = Podcast.objects.get(slug=slug)
 	if Podcast_Obj.Created_By_User == str(request.user.username):
 		Podcast_Obj.delete()
-	return HttpResponseRedirect('/podcast/archives')
+	return HttpResponseRedirect('/podcast/archives/')
 
 
 # Episode Modules
@@ -109,3 +110,12 @@ def EpisodeDeleteView(request,slug):
 	if Episode_Obj.Created_By_User == str(request.user.username):
 		Episode_Obj.delete()
 	return HttpResponseRedirect('/podcast/archives/'+str(Podcast_Link))
+
+def SearchPodcast(request):
+	if request.method == 'POST':
+		search_text = request.POST['search_text']
+	else:
+		search_text =''
+	Podcast_List = Podcast.objects.all().filter(Name__contains=str(search_text))
+	args = {'Podcast_List':Podcast_List}
+	return render(request,'Podcast/ajax-search.html',args)

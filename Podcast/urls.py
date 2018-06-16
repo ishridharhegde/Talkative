@@ -4,6 +4,7 @@ from Podcast.views import *
 urlpatterns = [
 url(r'^create/$',CreatePodcastView,name="Create Podcast Page"),
 url(r'^archives/$',PodcastListView,name="Podcast List Page"),
+url(r'^archives/search/$', SearchPodcast,name='Podcast Search Page'),
 url(r'^archives/(?P<slug>[-\w]+)/$',PodcastDetailView,name='Podcast Detail Page'),
 url(r'^archives/(?P<slug>[-\w]+)/edit/$',PodcastEditView,name="Podcast Edit Info"),
 url(r'^archives/(?P<slug>[-\w]+)/delete/$',PodcastDeleteView,name="Delete Podcast"),
