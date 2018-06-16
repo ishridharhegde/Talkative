@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {% load static %}
-		<link rel="stylesheet" type="text/css" href="{% static 'Podcast/Playlist_Player/css/foundation.min.css' %}"/>
-		<script type="text/javascript" src="{% static 'Podcast/Playlist_Player/js/jquery.js' %}"></script>
-		<script type="text/javascript" src="{% static 'Podcast/Playlist_Player/js/foundation.min.js' %}"></script>
-		<script type="text/javascript" src="{% static 'Podcast/Playlist_Player/js/amplitude.js' %}"></script>
-		<script type="text/javascript" src="{% static 'Podcast/Playlist_Player/js/functions.js' %}"></script>
-        <link rel="stylesheet" type="text/css" href="{% static 'Podcast/Playlist_Player/css/styles.css' %}"/>
-        
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'Podcast/Jplayer/css/jplayer-flat-audio-theme.css' %}" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="{% static 'Podcast/Jplayer/js/jquery.jplayer.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Podcast/Jplayer/js/jplayer.playlist.min.js' %}"></script>
     <title>{{ Podcast_Data.Name }}</title>
 </head>
 <body>
@@ -21,97 +19,86 @@
         {{ Podcast_Data.Description|safe|linebreaks}}
     </span>
     <h1>Episode Playlist</h1>
-    <div class="row">
-        <div class="large-8 medium-10 small-11 large-centered medium-centered small-centered columns" id="amplitude-player">
-            <div class="row">
-                <div class="large-6 medium-6 small-12 columns" id="amplitude-left">
-                    <img amplitude-song-info="cover_art_url" amplitude-main-song-info="true"/>
-                    <div id="player-left-bottom">
-                        <div id="time-container">
-                            <span class="current-time">
-                                <span class="amplitude-current-minutes" amplitude-main-current-minutes="true"></span>:<span class="amplitude-current-seconds" amplitude-main-current-seconds="true"></span>
-                            </span>
-                            <input type="range" class="amplitude-song-slider" amplitude-main-song-slider="true" step=".1"/>
-                            <span class="duration">
-                                <span class="amplitude-duration-minutes" amplitude-main-duration-minutes="true"></span>:<span class="amplitude-duration-seconds" amplitude-main-duration-seconds="true"></span>
-                            </span>
+    <div class="content-wrapper">
+        <div class="content-area">
+            <div id="jquery_jplayer_playlist" class="jp-jplayer"></div>
+            <div id="jp_container_playlist" class="jp-audio" role="application" aria-label="media player">
+                <div class="jp-type-playlist">
+                    <div class="jp-gui jp-interface">
+                        <div class="jp-controls">
+                            <a class="jp-previous"><i class="fa fa-backward"></i></a>
+                            <a class="jp-play"><i class="fa fa-play"></i></a>
+                            <a class="jp-pause"><i class="fa fa-pause"></i></a>
+                            <a class="jp-stop"><i class="fa fa-stop"></i></a>
+                            <a class="jp-next"><i class="fa fa-forward"></i></a>
                         </div>
-
-                        <div id="control-container">
-                            <div id="repeat-container">
-                                <div class="amplitude-repeat" id="repeat"></div>
-                            </div>
-
-                            <div id="central-control-container">
-                                <div id="central-controls">
-                                    <div class="amplitude-prev" id="previous"></div>
-                                    <div class="amplitude-play-pause" amplitude-main-play-pause="true" id="play-pause"></div>
-                                    <div class="amplitude-next" id="next"></div>
-                                </div>
-                            </div>
-
-                            <div id="shuffle-container">
-                                <div class="amplitude-shuffle amplitude-shuffle-off" id="shuffle"></div>
+                        <div class="jp-progress">
+                            <div class="jp-seek-bar">
+                                <div class="jp-play-bar"></div>
                             </div>
                         </div>
-
-                        <div id="meta-container">
-                            <span amplitude-song-info="name" amplitude-main-song-info="true" class="song-name"></span>
-
-                            <div class="song-artist-album">
-                                <span amplitude-song-info="artist" amplitude-main-song-info="true"></span>
-                                <span amplitude-song-info="album" amplitude-main-song-info="true"></span>
+                        <div class="jp-volume-controls">
+                            <a class="jp-mute"><i class="fa fa-volume-off"></i></a>
+                            <a class="jp-volume-max"><i class="fa fa-volume-up"></i></a>
+                            <div class="jp-volume-bar">
+                                <div class="jp-volume-bar-value"></div>
                             </div>
                         </div>
+                        <div class="jp-time-holder">
+                            <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+                            <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+                        </div>
+                    </div>                    
+            
+                    <div id="jp_container_N">
+                      <div class="jp-playlist">
+                        <ul>
+                           <li></li>
+                        </ul>
                     </div>
-                </div>
-                <div class="large-6 medium-6 small-12 columns" id="amplitude-right">
-                    <div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="0">
-                        <div class="song-now-playing-icon-container">
-                            <div class="play-button-container">
-
-                            </div>
-                            <img class="now-playing" src="{% static 'Podcast/Playlist_Player/img/now-playing.svg' %}"/>
-                        </div>
-                        
-                    {% for Episode in Episodes_List %}
-                    <div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="10">
-                        <div class="song-now-playing-icon-container">
-                            <div class="play-button-container">
-                            </div>
-                        </div>
-                        <div class="song-meta-data">
-                            <span class="song-title">{{Episode.Name}}</span>
-                            <span class="song-artist">{{Episode.Name}}</span>
-                        </div>
-                        <a href="{{ Episode.Episode_File.url }}" class="bandcamp-link" target="_blank">
-                            <img class="bandcamp-grey" src="{% static 'Podcast/Playlist_Player/img/bandcamp-grey.svg' %}"/>
-                            <img class="bandcamp-white" src="{% static 'Podcast/Playlist_Player/img/bandcamp-white.svg' %}"/>
-                        </a>
-                        <span class="song-duration">5:40</span>
                     </div>
-                    {% endfor %}
+
+                    <div class="jp-no-solution">
+                        <span>Update Required</span>
+                        To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                    </div>
                 </div>
             </div>
+            
         </div>
     </div>
-    </div>
-</body>
-{% for Episode in Episodes_List %}
-<script type="text/javascript">
-    Amplitude.init({
-        "songs": [
-            {
-                "name": "Risin' High (feat Raashan Ahmad)",
-                "artist": "Ancient Astronauts",
-                "album": "We Are to Answer",
-                "url": "{{ Episode.Episode_File.url }}",
-                "cover_art_url": "{{ Episode.Episode_Thumbnail.url }}"
-            },
-        ]
-    });
 
-</script>
-{% endfor %}
+        <!-- jPlayer JS -->
+        <script type="text/javascript">
+            $(document).ready(function(){
+                
+                new jPlayerPlaylist({
+                    jPlayer: "#jquery_jplayer_playlist",
+                    cssSelectorAncestor: "#jp_container_playlist"
+                }, [
+                    {% for Episode in Episodes_List %}
+                    {
+                        title:"{{ Episode.Name }}",
+                        artist:"{{ Podcast_Data.Author }}", // Optional
+                        free: Boolean, // Optional - Generates links to the media
+                        mp3:"{{ Episode.Episode_File.url }}", // Dependant on supplied option
+                        poster: "{{ Episode.Episode_Thumbnail.url }}" // Optional
+                    },
+                    {% endfor %}
+                ], {
+                    volume: 1.0,
+                    playlistOptions: {
+                        autoPlay: false,
+                    },
+                    swfPath: "js",
+                    supplied: "mp3",
+                    wmode: "window",
+                    useStateClassSkin: true,
+                    autoBlur: false,
+                    smoothPlayBar: true,
+                    keyEnabled: true
+                });
+            }); 
+        </script>
 </body>
 </html>
