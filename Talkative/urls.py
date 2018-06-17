@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
-    url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/', include('allauth.urls')),
+    #url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^podcast/',include('Podcast.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
